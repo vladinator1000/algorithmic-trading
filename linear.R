@@ -18,6 +18,15 @@ test <- data[c(splitIndex:nrow(data)),]
 model <- lm(Close ~ Date + Volume, data = train)
 predictions <- predict(model, test)
 
+# Find sell / buy points
+maxIndex <- which.max(predictions)
+predictionsBeforeMax <- predictions[c(1:maxIndex)]
+
+minIndex <- which.min(predictionsBeforeMax)
+predictedProfit <- predictions[maxIndex] - predictions[minIndex]
+actualProfit <- test$Close[maxIndex] - test$Close[minIndex]
+
+
 rmse <- function(fitted, observed) {
   sqrt(mean((fitted - observed) ^ 2))
 }
@@ -26,6 +35,13 @@ error <- rmse(test$Close, predictions)
 print("RMSE:")
 print(error)
 
-plot(as.vector(predictions), type = "l", col = "red", main = sprintf("ETF price prediction, name: %s, RMSE: %#.1f", formattedName, error), xlab = "Daily Date Index", ylab = "Price")
-lines(as.vector(test))
+plot(predictions, type = "l", col = "red", main = "Linear Model ETF price prediction", sub = sprintf("fund name: %s, RMSE: %#.1f", formattedName, error), xlab = "Daily Date Index", ylab = "Price")
+lines(test$Close)
+# Plot Sell point
+points(maxIndex, predictions[maxIndex], type="p", pch=1, col="green")
+
+# Plot Buy Point
+points(minIndex, predictions[minIndex], type="p", pch=1, col="green")
+
 legend("bottomright", c("Actual", "Prediction"), lwd = 4, col = c("black", "red"))
+legend("topright", c("Buy", "Sell"), pch=c(3, 2), col = c("Blue", "Green"))
