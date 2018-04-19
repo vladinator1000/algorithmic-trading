@@ -35,3 +35,4 @@ Pacf(price, main = 'Partial Autocorrelation of Price')
 plot(priceDiff1, main = 'Differenced Rrice')
 Acf(priceDiff1, main = 'Autocorrelation of Differenced Price')
 Pacf(priceDiff1, main = 'Autocorrelation of Differences Price')
+
