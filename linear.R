@@ -3,6 +3,16 @@ names <- c("veu.us.txt", "vig.us.txt", "xhs.us.txt")
 dataFolder <- file.path(getwd(), "data", "/")
 fileList <- list.files(path = dataFolder)
 
+colClasses = c("character", "numeric", "numeric", "numeric")
+col.names = c("name", "rmse", "predictedProfit", "actualProfit")
+
+results <- read.table(
+  text = "",
+  colClasses = colClasses,
+  col.names = col.names,
+  stringsAsFactors = FALSE
+)
+
 for (name in names) {
   formattedName <- gsub(".us.txt", "", name)
   path <- paste(dataFolder, name, sep = "")
@@ -53,4 +63,9 @@ for (name in names) {
   legend("bottomleft", c("Buy", "Sell"), pch=c(3, 2), col = c("Blue", "Green"))
   
   print(sprintf("RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", error, predictedProfit, actualProfit))
+  
+  results <- rbind(results, data.frame(name = formattedName, error, predictedProfit, actualProfit))
 }
+
+print("Linear Results")
+print(results)

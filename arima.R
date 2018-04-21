@@ -7,6 +7,16 @@ names <- c("veu.us.txt", "vig.us.txt", "xhs.us.txt")
 dataFolder <- file.path(getwd(), "data", "/")
 fileList <- list.files(path = dataFolder)
 
+colClasses = c("character", "numeric", "numeric", "numeric")
+col.names = c("name", "rmse", "predictedProfit", "actualProfit")
+
+results <- read.table(
+  text = "",
+  colClasses = colClasses,
+  col.names = col.names,
+  stringsAsFactors = FALSE
+)
+
 # Get a random fund name
 for (name in names) {
   formattedName <- gsub(".us.txt", "", name)
@@ -86,7 +96,10 @@ for (name in names) {
   legend("topright", c("Buy", "Sell"), pch=c(3, 2),lty=c(0,0), col = c("Blue", "Green"))
   
   
-  print(sprintf("RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", error, predictedProfit, actualProfit))
+  print(sprintf("Name: %s, RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", formattedName, error, predictedProfit, actualProfit))
   
-  print(sprintf("NAME %s", name))
+  results <- rbind(results, data.frame(name = formattedName, error, predictedProfit, actualProfit))
 }
+
+print("Arima Results")
+print(results)

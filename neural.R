@@ -1,10 +1,20 @@
 library(nnfor)
 library(xts)
 
-names <- c("veu.us.txt") #, "vig.us.txt", "xhs.us.txt")
+names <- c("veu.us.txt", "vig.us.txt", "xhs.us.txt")
 
 dataFolder <- file.path(getwd(), "data", "/")
 fileList <- list.files(path = dataFolder)
+
+colClasses = c("character", "numeric", "numeric", "numeric")
+col.names = c("name", "rmse", "predictedProfit", "actualProfit")
+
+results <- read.table(
+  text = "",
+  colClasses = colClasses,
+  col.names = col.names,
+  stringsAsFactors = FALSE
+)
 
 # Get a random fund name
 for (name in names) {
@@ -71,4 +81,9 @@ for (name in names) {
   
   
   print(sprintf("RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", error, predictedProfit, actualProfit))
+  
+  results <- rbind(results, data.frame(name = formattedName, error, predictedProfit, actualProfit))
 }
+
+print("Neural Net Results")
+print(results)
