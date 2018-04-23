@@ -2,7 +2,7 @@ library(tseries)
 library(forecast)
 library(xts)
 
-names <- c("veu.us.txt", "vig.us.txt", "xhs.us.txt")
+names <- c("ayt.us.txt", "bil.us.txt", "chie.us.txt",  "cefl.us.txt", "epu.us.txt", "fan.us.txt", "gal.us.txt", "veu.us.txt", "vig.us.txt", "xhs.us.txt")
 
 dataFolder <- file.path(getwd(), "data", "/")
 fileList <- list.files(path = dataFolder)
@@ -98,8 +98,18 @@ for (name in names) {
   
   print(sprintf("Name: %s, RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", formattedName, error, predictedProfit, actualProfit))
   
-  results <- rbind(results, data.frame(name = formattedName, error, predictedProfit, actualProfit))
+  results <- rbind(results, data.frame(name = formattedName, error, predictedProfit, actualProfit, absDistanceProfit = abs(predictedProfit - actualProfit)))
 }
 
-print("Arima Results")
+print("Results:")
 print(results)
+
+resultsNumeric <- results[, !(names(results) %in% c("name"))]
+means <- colMeans(resultsNumeric)
+finalResults <- data.frame(as.list(means))
+rownames(finalResults) <- "arima"
+
+print("Mean Results:")
+print(finalResults)
+
+write.table(finalResults, "results.csv", sep = ",", col.names = FALSE, append = TRUE)

@@ -1,4 +1,5 @@
 library(nnfor)
+library(xts)
 
 names <- c("ayt.us.txt", "bil.us.txt", "chie.us.txt",  "cefl.us.txt", "epu.us.txt", "fan.us.txt", "gal.us.txt", "veu.us.txt", "vig.us.txt", "xhs.us.txt")
 
@@ -19,7 +20,7 @@ results <- read.table(
 for (name in names) {
   dataFolder <- file.path(getwd(), "data", "/")
   fileList <- list.files(path = dataFolder)
-
+  
   formattedName <- gsub(".us.txt", "", name)
   data <- read.csv(paste(dataFolder, name, sep = ""))
   
@@ -31,20 +32,20 @@ for (name in names) {
   test <- data[c(splitIndex:nrow(data)),]
   test <- ts(test$Close)
   
-  # Train neural network
-  mlp.fit <- mlp(train)
   
-  png(filename = sprintf("plots/neuralSimple_model_%s.png", formattedName))
-  plot(mlp.fit, main = sprintf("Multi-layer Perceptron Model for %s", formattedName))
-  dev.off()
+  # Train neural network automatically choosing hidden nodes
+  mlp.fit <- mlp(train, hd.auto.type = "valid", hd.max = 10)
+  
+  png(filename = sprintf("plots/neuralAuto_model_%s.png", formattedName))
+  plot(mlp.fit)
   print(mlp.fit)
+  dev.off()
   
-
   # Forecast future prices
   mlp.frc <- forecast(mlp.fit, length(test))
   
-  png(filename = sprintf("plots/neuralSimple_forecast_%s.png", formattedName))
-  plot(mlp.frc, main = sprintf("Simple NN Model Forecasts for \"%s\"", formattedName))
+  png(filename = sprintf("plots/neuralAuto_model_%s.png", formattedName))
+  plot(mlp.frc)
   dev.off()
   
   # Plot predicted vs actual
@@ -64,7 +65,7 @@ for (name in names) {
   
   error <- rmse(as.vector(test), as.vector(predictions))
   
-  png(filename = sprintf("plots/neuralSimple_%s.png", formattedName))
+  png(filename = sprintf("plots/neuralAuto_%s.png", formattedName))
   plot(
     as.vector(predictions),
     type ="l",
@@ -98,7 +99,7 @@ print(results)
 resultsNumeric <- results[, !(names(results) %in% c("name"))]
 means <- colMeans(resultsNumeric)
 finalResults <- data.frame(as.list(means))
-rownames(finalResults) <- "neuralSimple"
+rownames(finalResults) <- "neuralAuto"
 
 print("Mean Results:")
 print(finalResults)

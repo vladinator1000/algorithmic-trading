@@ -1,4 +1,4 @@
-names <- c("veu.us.txt", "vig.us.txt", "xhs.us.txt")
+names <- c("ayt.us.txt", "bil.us.txt", "chie.us.txt",  "cefl.us.txt", "epu.us.txt", "fan.us.txt", "gal.us.txt", "veu.us.txt", "vig.us.txt", "xhs.us.txt")
 
 dataFolder <- file.path(getwd(), "data", "/")
 fileList <- list.files(path = dataFolder)
@@ -42,6 +42,7 @@ for (name in names) {
   
   error <- rmse(test$Close, predictions)
   
+  png(filename = sprintf("plots/linearModel_%s.png", formattedName))
   plot(
     as.vector(predictions),
     type ="l",
@@ -54,18 +55,28 @@ for (name in names) {
   lines(test$Close)
   
   # Plot Buy Point
-  points(minIndex, predictions[minIndex], type="p", pch=3, col="blue")
+  points(minIndex, predictions[minIndex], type = "p", pch = 3, col = "blue")
   
   # Plot Sell point
-  points(maxIndex, predictions[maxIndex], type="p", pch=2, col="green")
+  points(maxIndex, predictions[maxIndex], type = "p", pch = 2, col = "green")
   
   legend("bottomright", c("Actual", "Prediction"), lwd = 4, col = c("black", "red"))
-  legend("bottomleft", c("Buy", "Sell"), pch=c(3, 2), col = c("Blue", "Green"))
+  legend("bottomleft", c("Buy", "Sell"), pch = c(3, 2), col = c("Blue", "Green"))
   
-  print(sprintf("RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", error, predictedProfit, actualProfit))
+  dev.off()
   
-  results <- rbind(results, data.frame(name = formattedName, error, predictedProfit, actualProfit))
+  results <- rbind(results, data.frame(name = formattedName, error, predictedProfit, actualProfit, absDistanceProfit = abs(predictedProfit - actualProfit)))
 }
 
-print("Linear Results")
+print("Results:")
 print(results)
+
+resultsNumeric <- results[, !(names(results) %in% c("name"))]
+means <- colMeans(resultsNumeric)
+finalResults <- data.frame(as.list(means))
+rownames(finalResults) <- "linear"
+
+print("Mean Results:")
+print(finalResults)
+
+write.table(finalResults, "results.csv", sep = ",", col.names = FALSE, append = TRUE)
