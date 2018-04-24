@@ -2,7 +2,7 @@ library(tseries)
 library(forecast)
 library(xts)
 
-names <- c("ayt.us.txt", "bil.us.txt", "chie.us.txt",  "cefl.us.txt", "epu.us.txt", "fan.us.txt", "gal.us.txt", "veu.us.txt", "vig.us.txt", "xhs.us.txt")
+names <- c("ayt.us.txt", "bil.us.txt", "chie.us.txt",  "cred.us.txt", "epu.us.txt", "fan.us.txt", "gal.us.txt", "veu.us.txt", "vig.us.txt", "xhs.us.txt")
 
 dataFolder <- file.path(getwd(), "data", "/")
 fileList <- list.files(path = dataFolder)
