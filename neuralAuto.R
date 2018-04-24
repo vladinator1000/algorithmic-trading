@@ -36,7 +36,7 @@ for (name in names) {
   # Train neural network automatically choosing hidden nodes
   mlp.fit <- mlp(train, hd.auto.type = "valid", hd.max = 10)
   
-  png(filename = sprintf("plots/neuralAuto_model_%s.png", formattedName))
+  png(filename = sprintf("plots/neural/neuralAuto_model_%s.png", formattedName))
   plot(mlp.fit)
   print(mlp.fit)
   dev.off()
@@ -44,7 +44,7 @@ for (name in names) {
   # Forecast future prices
   mlp.frc <- forecast(mlp.fit, length(test))
   
-  png(filename = sprintf("plots/neuralAuto_model_%s.png", formattedName))
+  png(filename = sprintf("plots/neural/neuralAuto_forecast_%s.png", formattedName))
   plot(mlp.frc)
   dev.off()
   
@@ -65,7 +65,7 @@ for (name in names) {
   
   error <- rmse(as.vector(test), as.vector(predictions))
   
-  png(filename = sprintf("plots/neuralAuto_%s.png", formattedName))
+  png(filename = sprintf("plots/neural/neuralAuto_%s.png", formattedName))
   plot(
     as.vector(predictions),
     type ="l",

@@ -25,7 +25,7 @@ for (name in names) {
   test <- data[c(splitIndex:nrow(data)),]
   
   model <- lm(Close ~ Date + Volume, data = train)
-  predictions <- predict(model, test)
+  predictions <- predict(model, test, n.ahead = 300)
   
   # Find sell / buy points
   maxIndex <- which.max(predictions)
@@ -42,7 +42,7 @@ for (name in names) {
   
   error <- rmse(test$Close, predictions)
   
-  png(filename = sprintf("plots/linearModel_%s.png", formattedName))
+  png(filename = sprintf("plots/linear/linearModel_%s.png", formattedName))
   plot(
     as.vector(predictions),
     type ="l",

@@ -55,6 +55,7 @@ for (name in names) {
   print("RMSE:")
   print(error)
   
+  png(filename = sprintf("plots/holtWinters/holtPrediction_%s.png", formattedName))
   plot(
     as.vector(predictions),
     type ="l",
@@ -73,7 +74,8 @@ for (name in names) {
   points(maxIndex, predictions[maxIndex], type="p", pch=2, col="green")
   
   legend("bottomright", c("Actual", "Prediction"), lwd = 4, col = c("black", "red"))
-  legend("topright", c("Buy", "Sell"), pch=c(3, 2), col = c("Blue", "Green"))
+  legend("topright", c("Buy", "Sell"), pch = c(3, 2), col = c("Blue", "Green"))
+  dev.off()
   
   print(sprintf("RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", error, predictedProfit, actualProfit))
   

@@ -34,7 +34,7 @@ for (name in names) {
   # Train neural network
   mlp.fit <- mlp(train)
   
-  png(filename = sprintf("plots/neuralSimple_model_%s.png", formattedName))
+  png(filename = sprintf("plots/neural/neuralSimple_model_%s.png", formattedName))
   plot(mlp.fit, main = sprintf("Multi-layer Perceptron Model for %s", formattedName))
   dev.off()
   print(mlp.fit)
@@ -43,7 +43,7 @@ for (name in names) {
   # Forecast future prices
   mlp.frc <- forecast(mlp.fit, length(test))
   
-  png(filename = sprintf("plots/neuralSimple_forecast_%s.png", formattedName))
+  png(filename = sprintf("plots/neural/neuralSimple_forecast_%s.png", formattedName))
   plot(mlp.frc, main = sprintf("Simple NN Model Forecasts for \"%s\"", formattedName))
   dev.off()
   
@@ -64,7 +64,7 @@ for (name in names) {
   
   error <- rmse(as.vector(test), as.vector(predictions))
   
-  png(filename = sprintf("plots/neuralSimple_%s.png", formattedName))
+  png(filename = sprintf("plots/neural/neuralSimple_%s.png", formattedName))
   plot(
     as.vector(predictions),
     type ="l",

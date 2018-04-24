@@ -44,11 +44,15 @@ for (name in names) {
   
   # Autocorrelation (correlation between series and its lags)
   # dotted blue lines show 95% significance boundaries
+  png(filename = sprintf("plots/arima/acf_%s.png", formattedName))
   Acf(train, main = 'Autocorrelation of Price')
+  dev.off()
   
   # Partial Autocorrelation
   # shows correlation between a variable and its lags that is not explained by previous lags
+  png(filename = sprintf("plots/arima/pacf_%s.png", formattedName))
   Pacf(train, main = 'Partial Autocorrelation of Price')
+  dev.off()
   
   # Examine differenced price
   plot(priceDiff1, main = 'Differenced Price')
@@ -74,7 +78,7 @@ for (name in names) {
   predictedProfit <- predictions[maxIndex] - predictions[minIndex]
   actualProfit <- test[maxIndex] - test[minIndex]
   
-  
+  png(filename = sprintf("plots/arima/arimaPrediction_%s.png", formattedName))
   plot(
     test,
     type ="l",
@@ -94,6 +98,7 @@ for (name in names) {
   
   legend("bottomright", c("Actual", "Prediction"), lwd = 4, col = c("black", "red"))
   legend("topright", c("Buy", "Sell"), pch=c(3, 2),lty=c(0,0), col = c("Blue", "Green"))
+  dev.off()
   
   
   print(sprintf("Name: %s, RMSE: %#.1f, Predicted Profit: %#.1f, Actual Profit: %#.1f", formattedName, error, predictedProfit, actualProfit))
